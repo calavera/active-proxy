@@ -28,4 +28,5 @@ func main() {
 	fmt.Println(c)
 	fmt.Println(c.Get("test", "a"))
 	fmt.Println(c.Get("", "dd"))
+	c.WriteTo("example2.conf")
 }

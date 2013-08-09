@@ -19,6 +19,8 @@ package config
 import (
 	"bufio"
 	"errors"
+	"fmt"
+	"io/ioutil"
 	"os"
 	"strings"
 )
@@ -143,6 +145,14 @@ func (c *Config) Write() {
 // WriteTo function writes the configuration to a new file. This function
 // re-organizes the configuration and deletes all the comments.
 func (c *Config) WriteTo(filename string) {
+	content := ""
+	for k, v := range c.config {
+		content += fmt.Sprintf("[%v]\n", k)
+		for key, value := range v {
+			content += fmt.Sprintf("\t%v = %v\n", key, value)
+		}
+	}
+	ioutil.WriteFile(filename, []byte(content), 0644)
 }
 
 // To check this line if section or not. If it is not a section, it returns
