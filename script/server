@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+
+./gopack run main.go watcher.go proxy.go "$@"
