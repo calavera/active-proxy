@@ -18,7 +18,5 @@ func parseFlags() string {
 
 	flag.Parse()
 
-	addr := fmt.Sprintf("%s:%s", *host, *port)
-
-	return addr
+	return fmt.Sprintf("%s:%s", *host, *port)
 }
