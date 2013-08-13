@@ -10,6 +10,7 @@ func main() {
 	w := NewWatcher()
 
 	w.StartApplications(p)
+	p.Start()
 }
 
 func parseFlags() string {

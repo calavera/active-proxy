@@ -30,10 +30,12 @@ func (w *watcher) Init() {
 func (w *watcher) StartApplications(p *proxy) {
 	w.loadApplications(p)
 
-	appsChannel := make(chan *store.Response, 10)
-	go w.watchApplications(p, appsChannel)
+	go func() {
+		appsChannel := make(chan *store.Response, 10)
+		w.watchApplications(p, appsChannel)
 
-	w.client.Watch("applications", 0, appsChannel, nil)
+		w.client.Watch("applications", 0, appsChannel, nil)
+	}()
 }
 
 func (w *watcher) loadApplications(p *proxy) {

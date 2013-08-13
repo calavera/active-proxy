@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"github.com/daaku/go.grace/gracehttp"
 	"io"
 	"log"
 	"net/http"
@@ -28,18 +29,14 @@ func NewProxy(address string) *proxy {
 
 func (p *proxy) Init() {
 	p.apps = make(map[string]*application)
+}
 
+func (p *proxy) Start() {
 	mux := http.NewServeMux()
-	p.Transport = &http.Transport{DisableKeepAlives: false, DisableCompression: false}
-
 	mux.Handle("/", p)
 
-	go func() {
-		log.Printf("Starting proxy at %s\n", p.Address)
-		srv := &http.Server{Handler: mux, Addr: p.Address}
-
-		log.Fatal(srv.ListenAndServe())
-	}()
+	log.Printf("Starting proxy at %s\n", p.Address)
+	log.Fatal(gracehttp.Serve(&http.Server{Handler: mux, Addr: p.Address}))
 }
 
 func (p *proxy) Route(app *application) {
