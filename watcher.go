@@ -1,7 +1,6 @@
 package main
 
 import (
-	"github.com/coreos/etcd/store"
 	"github.com/coreos/go-etcd/etcd"
 	"log"
 	"strings"
@@ -20,7 +19,7 @@ func NewWatcher() *watcher {
 }
 
 func (w *watcher) Init() {
-	w.client = etcd.NewClient()
+	w.client = etcd.NewClient([]string{})
 
 	if len(w.etcdMachines) > 0 {
 		w.client.SetCluster(w.etcdMachines)
@@ -31,7 +30,7 @@ func (w *watcher) StartApplications(p *proxy) {
 	w.loadApplications(p)
 
 	go func() {
-		appsChannel := make(chan *store.Response, 10)
+		appsChannel := make(chan *etcd.Response, 10)
 		w.watchApplications(p, appsChannel)
 
 		w.client.Watch("applications", 0, appsChannel, nil)
@@ -49,7 +48,7 @@ func (w *watcher) loadApplications(p *proxy) {
 	}
 }
 
-func (w *watcher) watchApplications(p *proxy, appsChannel chan *store.Response) {
+func (w *watcher) watchApplications(p *proxy, appsChannel chan *etcd.Response) {
 	for {
 		entry := <-appsChannel
 		app := strings.Split(entry.Key, "/")[2]
