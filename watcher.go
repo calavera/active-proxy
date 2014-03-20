@@ -12,14 +12,14 @@ type watcher struct {
 	client       *etcd.Client
 }
 
-func NewWatcher() *watcher {
+func NewWatcher(etcdURLS string) *watcher {
 	w := &watcher{}
-	w.Init()
+	w.Init(etcdURLS)
 	return w
 }
 
-func (w *watcher) Init() {
-	w.client = etcd.NewClient([]string{})
+func (w *watcher) Init(etcdURLS string) {
+	w.client = etcd.NewClient(strings.Split(etcdURLS, ","))
 
 	if len(w.etcdMachines) > 0 {
 		w.client.SetCluster(w.etcdMachines)
