@@ -34,6 +34,7 @@ func (p *proxy) Init() {
 func (p *proxy) Start() {
 	mux := http.NewServeMux()
 	mux.Handle("/", p)
+	p.Transport = &http.Transport{DisableKeepAlives: false, DisableCompression: false}
 
 	log.Printf("Starting proxy at %s\n", p.Address)
 	log.Fatal(gracehttp.Serve(&http.Server{Handler: mux, Addr: p.Address}))
